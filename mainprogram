@@ -1,0 +1,106 @@
+/*
+	FILE *start, *finish;
+	fopen_s(&start, "ishodnii.txt", "r");
+	fopen_s(&finish, "rezultat.txt", "w");
+
+	printf("Введите название файла из которого беруться значения\n");
+	scanf_s("%s", f1, 20);
+	printf("Введите название файла в который помещаются обработанные значения\n");
+	scanf_s("%s", f2, 20);
+	FILE *start, *finish;
+	fopen_s(&start, f1, "r");
+	fopen_s(&finish, f2, "w");
+*/
+#include <stdio.h>
+#include <locale>
+void main()
+{
+	char c, cp, frst, a, b, d, f1[20], f2[20];
+	int k, fla, flb, fld, flgot;
+	setlocale(LC_ALL, "Russian");
+
+	printf("Введите название файла из которого беруться значения\n");
+	scanf_s("%s", f1, 20);
+	printf("Введите название файла в который помещаются обработанные значения\n");
+	scanf_s("%s", f2, 20);
+	FILE *start, *finish;
+	fopen_s(&start, f1, "r");
+	fopen_s(&finish, f2, "w");
+
+	c = fgetc(start);
+	frst = c;
+	fla = 0;
+	flb = 0;
+	fld = 0;
+	flgot = 0;
+
+	while (c != EOF)
+	{
+		if (c == '\n')
+		{
+			fputc(c, finish); 
+			c = fgetc(start);
+		}
+		while (c == ' ')
+		{
+			fputc(c, finish);
+			c = fgetc(start);
+
+		}
+		if (c == '\n')
+		{
+			cp = c;
+			fputc(c, finish);
+			c = fgetc(start);
+		}
+		while (c != ' ' && c != '\n' && c != EOF)
+		{
+			if (fla == 0)
+			{
+				a = c;
+				c = fgetc(start);
+				fla = 1;
+			}
+			else
+				if (flb == 0)
+				{
+					b = c;
+					c = fgetc(start);
+					flb = 1;
+				}
+				else
+					if (fld == 0)
+					{
+						d = c;
+						c = fgetc(start);
+						fld = 1;
+					}
+			if (fla == 1 && flb == 1 && fld == 1 && flgot == 0)
+			{
+				fputc(a, finish);
+				fputc(b, finish);
+				fputc(d, finish);
+				flgot = 1;
+			}
+			if (flgot == 1)
+			{
+				while (c != ' ' && c != '\n' && c != EOF)
+				{
+					fputc(c, finish);
+					c = fgetc(start);
+				}
+			}
+			if (c == ' ' || c == '\n' || c == EOF)
+			{
+				fla = 0;
+				flb = 0;
+				fld = 0;
+				flgot = 0;
+			}
+		}
+		
+	}
+	fclose(start);
+	fclose(finish);
+	
+}
